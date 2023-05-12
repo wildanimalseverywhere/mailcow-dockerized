@@ -58,12 +58,7 @@ else
   exit 1
 fi
 
-### If generate_config.sh is started with --dev or -d it will not check out nightly or master branch and will keep on the current branch
-if [[ ${1} == "--dev" || ${1} == "-d" ]]; then
-  SKIP_BRANCH=y
-else
-  SKIP_BRANCH=n
-fi
+SKIP_BRANCH=y
 
 if [ -f mailcow.conf ]; then
   read -r -p "A config file exists and will be overwritten, are you sure you want to continue? [y/N] " response
@@ -78,15 +73,7 @@ if [ -f mailcow.conf ]; then
   esac
 fi
 
-echo "Press enter to confirm the detected value '[value]' where applicable or enter a custom value."
-while [ -z "${MAILCOW_HOSTNAME}" ]; do
-  read -p "Mail server hostname (FQDN) - this is not your mail domain, but your mail servers hostname: " -e MAILCOW_HOSTNAME
-  DOTS=${MAILCOW_HOSTNAME//[^.]};
-  if [ ${#DOTS} -lt 2 ] && [ ! -z ${MAILCOW_HOSTNAME} ]; then
-    echo "${MAILCOW_HOSTNAME} is not a FQDN"
-    MAILCOW_HOSTNAME=
-  fi
-done
+MAILCOW_HOSTNAME= ${1}
 
 if [ -a /etc/timezone ]; then
   DETECTED_TZ=$(cat /etc/timezone)
@@ -94,52 +81,14 @@ elif [ -a /etc/localtime ]; then
   DETECTED_TZ=$(readlink /etc/localtime|sed -n 's|^.*zoneinfo/||p')
 fi
 
-while [ -z "${MAILCOW_TZ}" ]; do
-  if [ -z "${DETECTED_TZ}" ]; then
-    read -p "Timezone: " -e MAILCOW_TZ
-  else
-    read -p "Timezone [${DETECTED_TZ}]: " -e MAILCOW_TZ
-    [ -z "${MAILCOW_TZ}" ] && MAILCOW_TZ=${DETECTED_TZ}
-  fi
-done
+MAILCOW_TZ=${DETECTED_TZ}
 
 MEM_TOTAL=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 
-if [ ${MEM_TOTAL} -le "2621440" ]; then
-  echo "Installed memory is <= 2.5 GiB. It is recommended to disable ClamAV to prevent out-of-memory situations."
-  echo "ClamAV can be re-enabled by setting SKIP_CLAMD=n in mailcow.conf."
-  read -r -p  "Do you want to disable ClamAV now? [Y/n] " response
-  case $response in
-    [nN][oO]|[nN])
-      SKIP_CLAMD=n
-      ;;
-    *)
-      SKIP_CLAMD=y
-    ;;
-  esac
-else
-  SKIP_CLAMD=n
-fi
+SKIP_CLAMD=y
+SKIP_SOLR=y
 
-if [ ${MEM_TOTAL} -le "2097152" ]; then
-  echo "Disabling Solr on low-memory system."
-  SKIP_SOLR=y
-elif [ ${MEM_TOTAL} -le "3670016" ]; then
-  echo "Installed memory is <= 3.5 GiB. It is recommended to disable Solr to prevent out-of-memory situations."
-  echo "Solr is a prone to run OOM and should be monitored. The default Solr heap size is 1024 MiB and should be set in mailcow.conf according to your expected load."
-  echo "Solr can be re-enabled by setting SKIP_SOLR=n in mailcow.conf but will refuse to start with less than 2 GB total memory."
-  read -r -p  "Do you want to disable Solr now? [Y/n] " response
-  case $response in
-    [nN][oO]|[nN])
-      SKIP_SOLR=n
-      ;;
-    *)
-      SKIP_SOLR=y
-    ;;
-  esac
-else
-  SKIP_SOLR=n
-fi
+
 
 if [[ ${SKIP_BRANCH} != y ]]; then
   echo "Which branch of mailcow do you want to use?"
