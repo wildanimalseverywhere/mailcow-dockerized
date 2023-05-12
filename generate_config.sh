@@ -350,9 +350,9 @@ IPV6_NETWORK=fd4d:6169:6c63:6f77::/64
 # Allowed chars for API_KEY and API_KEY_READ_ONLY: a-z, A-Z, 0-9, -
 # You can define API_KEY and/or API_KEY_READ_ONLY
 
-#API_KEY=${2}
+API_KEY=${2}
 #API_KEY_READ_ONLY=
-#API_ALLOW_FROM=172.22.1.1,127.0.0.1
+API_ALLOW_FROM=172.22.1.1,127.0.0.1
 
 # mail_home is ~/Maildir
 MAILDIR_SUB=Maildir
