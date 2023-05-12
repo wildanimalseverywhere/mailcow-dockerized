@@ -73,7 +73,7 @@ if [ -f mailcow.conf ]; then
   esac
 fi
 
-MAILCOW_HOSTNAME= ${1}
+MAILCOW_HOSTNAME=${1}
 
 if [ -a /etc/timezone ]; then
   DETECTED_TZ=$(cat /etc/timezone)
