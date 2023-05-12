@@ -173,7 +173,7 @@ DBROOT=$(LC_ALL=C </dev/urandom tr -dc A-Za-z0-9 2> /dev/null | head -c 28)
 HTTP_PORT=80
 HTTP_BIND=
 
-HTTPS_PORT=443
+HTTPS_PORT=5443
 HTTPS_BIND=
 
 # ------------------------------
@@ -255,7 +255,7 @@ ADDITIONAL_SERVER_NAMES=
 
 # Skip running ACME (acme-mailcow, Let's Encrypt certs) - y/n
 
-SKIP_LETS_ENCRYPT=n
+SKIP_LETS_ENCRYPT=y
 
 # Create seperate certificates for all domains - y/n
 # this will allow adding more than 100 domains, but some email clients will not be able to connect with alternative hostnames
@@ -264,11 +264,11 @@ ENABLE_SSL_SNI=n
 
 # Skip IPv4 check in ACME container - y/n
 
-SKIP_IP_CHECK=n
+SKIP_IP_CHECK=y
 
 # Skip HTTP verification in ACME container - y/n
 
-SKIP_HTTP_VERIFICATION=n
+SKIP_HTTP_VERIFICATION=y
 
 # Skip ClamAV (clamd-mailcow) anti-virus (Rspamd will auto-detect a missing ClamAV container) - y/n
 
@@ -350,7 +350,7 @@ IPV6_NETWORK=fd4d:6169:6c63:6f77::/64
 # Allowed chars for API_KEY and API_KEY_READ_ONLY: a-z, A-Z, 0-9, -
 # You can define API_KEY and/or API_KEY_READ_ONLY
 
-#API_KEY=
+#API_KEY=${2}
 #API_KEY_READ_ONLY=
 #API_ALLOW_FROM=172.22.1.1,127.0.0.1
 
