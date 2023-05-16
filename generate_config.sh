@@ -170,7 +170,7 @@ DBROOT=$(LC_ALL=C </dev/urandom tr -dc A-Za-z0-9 2> /dev/null | head -c 28)
 # For IPv4 leave it as it is: HTTP_BIND= & HTTPS_PORT=
 # For IPv6 see https://mailcow.github.io/mailcow-dockerized-docs/post_installation/firststeps-ip_bindings/
 
-HTTP_PORT=80
+HTTP_PORT=85
 HTTP_BIND=
 
 HTTPS_PORT=5443
